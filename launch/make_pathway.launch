@@ -1,0 +1,17 @@
+<launch>
+    
+    <arg name="directory_to_save_paths" value="/init/paths"/>
+    <arg name="pathway_filename" value="pathway.txt"/>
+    <arg name="current_pose_topic_name" value="/amcl_pose"/>
+    <arg name="map_frame_id" value="map"/>
+    <arg name="base_frame_id" value="base_link"/>
+
+    <node pkg="make_pathway" type="make_pathway_node" name="make_pathway_node" output="screen">
+        <param name="directory_to_save_paths" type="string" value="$(arg directory_to_save_paths)"/>
+        <param name="pathway_filename" type="string" value="$(arg pathway_filename)"/>
+        <param name="current_pose_topic_name" type="string" value="$(arg current_pose_topic_name)"/>
+        <param name="map_frame_id" type="string" value="$(arg map_frame_id)"/>
+        <param name="base_frame_id" type="string" value="$(arg base_frame_id)"/>
+    </node>
+
+</launch>
