@@ -85,6 +85,7 @@ namespace make_pathway
             double current_pose_Yaw; 
 
             bool start_create_paths;   
+            bool if_current_pose_msg_update{false};
             string nodename_;         
 
             ros::NodeHandle nh_;

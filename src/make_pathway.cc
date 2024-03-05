@@ -85,17 +85,20 @@ namespace make_pathway
     {
         if(start_create_paths)
         {
-            geometry_msgs::Pose current_pose;
-            if(getPose(userParams_->base_frame_id, userParams_->map_frame_id, current_pose))
+            if(!if_current_pose_msg_update)
             {
-                current_pose_X = current_pose.position.x;
-                current_pose_Y = current_pose.position.y;
-                current_pose_Yaw = getYaw(current_pose.orientation.x, 
-                current_pose.orientation.y, current_pose.orientation.z, current_pose.orientation.w);
-                // ROS_WARN("current_pose_X: %f, current_pose_Y: %f, current_pose_Yaw: %f", current_pose_X, current_pose_Y, current_pose_Yaw);
-                Pose currentPose(current_pose_X, current_pose_Y, current_pose_Yaw);
-                pathway->ResetAndRecordPath(*startPose, currentPose, 2, 0.15, 0.05);
-            }        
+                geometry_msgs::Pose current_pose;
+                if(getPose(userParams_->base_frame_id, userParams_->map_frame_id, current_pose))
+                {
+                    current_pose_X = current_pose.position.x;
+                    current_pose_Y = current_pose.position.y;
+                    current_pose_Yaw = getYaw(current_pose.orientation.x, 
+                    current_pose.orientation.y, current_pose.orientation.z, current_pose.orientation.w);
+                    // ROS_WARN("current_pose_X: %f, current_pose_Y: %f, current_pose_Yaw: %f", current_pose_X, current_pose_Y, current_pose_Yaw);                
+                } 
+            }
+            Pose currentPose(current_pose_X, current_pose_Y, current_pose_Yaw);
+            pathway->ResetAndRecordPath(*startPose, currentPose, 2, 0.15, 0.05);                       
         }
     }
 
@@ -119,11 +122,12 @@ namespace make_pathway
 
     void MakePathwayNode::HandleCurrentPose(const geometry_msgs::PoseStamped::ConstPtr &msg)
     {        
-        // current_pose_X = msg->pose.position.x;
-        // current_pose_Y = msg->pose.position.y;
-        // current_pose_Yaw = getYaw(msg->pose.orientation.x, 
-        // msg->pose.orientation.y, msg->pose.orientation.z, msg->pose.orientation.w);
-        // ROS_WARN("current_pose_X: %f, current_pose_Y: %f, current_pose_Yaw: %f", current_pose_X, current_pose_Y, current_pose_Yaw);
+        current_pose_X = msg->pose.position.x;
+        current_pose_Y = msg->pose.position.y;
+        current_pose_Yaw = getYaw(msg->pose.orientation.x, 
+        msg->pose.orientation.y, msg->pose.orientation.z, msg->pose.orientation.w);
+        ROS_WARN("current_pose_X: %f, current_pose_Y: %f, current_pose_Yaw: %f", current_pose_X, current_pose_Y, current_pose_Yaw);
+        if_current_pose_msg_update = true;
     }
 
     void MakePathwayNode::HandleOdomData(const nav_msgs::Odometry::ConstPtr &msg)
